@@ -4,15 +4,22 @@ namespace EspacioDeCadeteria
 {
     public enum Estado{
         Cancelado,
-        Preparacion,
         Entregado,
-        EnEnvio
+        EnPreparacion
     }
     public class Cadeteria{
         private string? nombre;
         private int telefono;
         private int numeradorPedidos;
         private List<Cadetes> cadeteros;
+        
+        public Cadeteria(global::System.String? nombre, global::System.Int32 telefono, global::System.Int32 numeradorPedidos, List<Cadetes> cadeteros)
+        {
+            this.nombre = nombre;
+            this.telefono = telefono;
+            this.numeradorPedidos = numeradorPedidos;
+            this.cadeteros = cadeteros;
+        }
 
         public string? Nombre { get => nombre; set => nombre = value; }
         public int Telefono { get => telefono; set => telefono = value; }
@@ -24,7 +31,24 @@ namespace EspacioDeCadeteria
 
                 }
                 }
-        ;
+        
+        }
+        public void MoverPedido(int idCadete1,int idCadete2,int NroPedido){
+            Pedidos Pedaux;
+            foreach (Cadetes Cadete in cadeteros)
+            {
+                if (Cadete.Id==idCadete1)
+                {
+                    foreach (Pedidos Ped in Cadete.ListaPedidos)
+                    {
+                        if (Ped.NroPedido==NroPedido)
+                        {
+                            Pedaux=Ped;
+                        }
+                        
+                    }
+                }
+            }
         }
     }
     public class Cadetes{
@@ -44,6 +68,7 @@ namespace EspacioDeCadeteria
             Pedidos pedido=new Pedidos(NroPedido,obs,nombre,direccion,telefono, datosDeReferencia);
             ListaPedidos.Add(pedido);
         }
+        }
     public class Pedidos{
         private int nroPedido;
         private string observacion;
@@ -62,7 +87,7 @@ namespace EspacioDeCadeteria
             NroPedido = nroPedido;
             Observacion = observacion;
             Cli = ClientePed;
-            EstadoDePedido = Estado.Preparacion;
+            EstadoDePedido = Estado.EnPreparacion;
         }
     }
     public class Cliente{
@@ -79,10 +104,9 @@ namespace EspacioDeCadeteria
             DatosDeReferencia = datosDeReferencia;
         }
 
-        public string? Nombre { get => nombre; set => nombre = value; } //hola
+        public string? Nombre { get => nombre; set => nombre = value; } 
         public string? Direccion { get => direccion; set => direccion = value; }
         public int Telefono { get => telefono; set => telefono = value; }
         public string? DatosDeReferencia { get => datosDeReferencia; set => datosDeReferencia = value; }
         }
     }   
-}
