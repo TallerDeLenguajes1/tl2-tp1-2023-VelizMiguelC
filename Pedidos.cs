@@ -16,7 +16,7 @@ namespace EspacioDeCadeteria
         {
             NroPedido = nroPedido;
             Observacion = observacion;
-            Cli = Cliente;
+            Cli = cliente;
             EstadoDePedido = Estado.EnPreparacion;
         }
         public void EntregarPedido(){
@@ -27,3 +27,4 @@ namespace EspacioDeCadeteria
         }
     }
     }   
+    

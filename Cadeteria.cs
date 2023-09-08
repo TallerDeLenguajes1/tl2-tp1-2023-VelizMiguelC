@@ -8,47 +8,67 @@ namespace EspacioDeCadeteria
         EnPreparacion
     }
     public class Cadeteria{
-        private string? nombre;
+        private string nombre;
         private int telefono;
         private int numeradorPedidos;
         private List<Cadetes> cadeteros;
         
-        public Cadeteria(global::System.String? nombre, global::System.Int32 telefono, global::System.Int32 numeradorPedidos, List<Cadetes> cadeteros)
+        public Cadeteria(global::System.String nombre, global::System.Int32 telefono)
         {
             this.nombre = nombre;
             this.telefono = telefono;
-            this.numeradorPedidos = numeradorPedidos;
-            this.cadeteros = cadeteros;
+            this.NumeradorPedidos = 0;
+            this.cadeteros = new List<Cadetes>();
+            this.NumeradorPedidos=0;
         }
 
-        public string? Nombre { get => nombre; set => nombre = value; }
+        public string Nombre { get => nombre; set => nombre = value; }
         public int Telefono { get => telefono; set => telefono = value; }
         public List<Cadetes> Cadeteros { get => cadeteros; set => cadeteros = value; }
-        public void CrearPedido(int idCadete,string?obs,string? nombre, string? direccion, int telefono, string? datosDeReferencia){
-            foreach (Cadetes cadete in cadeteros){
-                if (cadete.Id==idCadete){
-                cadete.CreaPedido(numeradorPedidos,obs, nombre, direccion, telefono, datosDeReferencia);
+        public int NumeradorPedidos { get => numeradorPedidos; set => numeradorPedidos = value; }
 
-                }
-                }
-        
+        public Pedidos TomarPedido(string observacion,string nombre, string direccion, int telefono, string datosDeReferencia){
+            NumeradorPedidos++;
+            var cliente=new Cliente(nombre, direccion,telefono,datosDeReferencia);
+            var Pedido=new Pedidos(NumeradorPedidos,observacion, cliente);
+            return Pedido;
         }
-        public void MoverPedido(int idCadete1,int idCadete2,int NroPedido){
-            Pedidos Pedaux;
+        public void AsignarPedido(int id,Pedidos ped){
+            var cad= Cadeteros.FirstOrDefault(p=>p.Id==id);
+            cad.ListaPedidos.Add(ped);
+        }        
+        public void MoverPedido(int idCadete,int NroPedido){
+            Pedidos Pedaux=null;
             foreach (Cadetes Cadete in cadeteros)
             {
-                if (Cadete.Id==idCadete1)
+                if (Cadete.Id!=idCadete)
                 {
-                    foreach (Pedidos Ped in Cadete.ListaPedidos)
+                    Pedaux=Cadete.QuitarPedido(NumeradorPedidos);
+                }
+                if (Pedaux != null)
+                {
+                    foreach (var cad in Cadeteros)
                     {
-                        if (Ped.NroPedido==NroPedido)
-                        {
-                            Pedaux=Ped;
-                        }
-                        
+                        cad.ListaPedidos.Add(Pedaux);
                     }
                 }
+
             }
         }
+    public float PedPromedioCad(){
+        int pedidos = 0;
+        foreach (var c in Cadeteros)
+        {
+            pedidos += c.CantidadDePedidos(0); 
+        }
+        return pedidos/Cadeteros.Count();
     }
-    }   
+    public float TotalaPagar(){
+        float monto=0;
+        foreach (var cad in Cadeteros){
+            monto = monto + cad.JornalACobrar();
+        }
+        return monto;
+    }
+    }
+}
