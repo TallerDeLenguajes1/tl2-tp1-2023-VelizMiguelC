@@ -12,13 +12,18 @@ namespace EspacioDeCadeteria
         public string Observacion { get => observacion; set => observacion = value; }
         public Cliente Cli { get => cli; set => cli = value; }
         public Estado EstadoDePedido { get => estadoDePedido; set => estadoDePedido = value; }
-        public Pedidos(int nroPedido, string observacion,string? nombre, string? direccion, int telefono, string? datosDeReferencia)
+        public Pedidos(int nroPedido, string observacion,Cliente cliente)
         {
-            var ClientePed=new Cliente(nombre,direccion, telefono,datosDeReferencia);
             NroPedido = nroPedido;
             Observacion = observacion;
-            Cli = ClientePed;
+            Cli = Cliente;
             EstadoDePedido = Estado.EnPreparacion;
+        }
+        public void EntregarPedido(){
+            EstadoDePedido=Estado.Entregado;
+        }
+        public void CancelarPedido(){
+            EstadoDePedido =Estado.Cancelado;
         }
     }
     }   
